@@ -305,7 +305,7 @@ def show_affordability_analysis(iclevel=4):
             "Minimum % of Q1 Students",
             min_value=0,
             max_value=50,
-            value=5,
+            value=0,
             step=1,
             help="Filter institutions by minimum percentage of students from bottom quintile"
         )
@@ -324,24 +324,31 @@ def show_affordability_analysis(iclevel=4):
         )
         
         if view_type == "Plot":
+            st.markdown(f"## {selected_group} Institutions" if selected_group != "All" else "## All Institutions")
             show_affordability_plot(df, selected_group)
         else:  # List view
-            show_summary_statistics(df, selected_group)
+            # Filter data based on selected group before showing statistics and list
+            filtered_df = df.copy()
+            if selected_group != "All":
+                filtered_df = df[df['group'] == selected_group]
+            
+            st.markdown(f"## {selected_group} Institutions" if selected_group != "All" else "## All Institutions")
+            show_summary_statistics(filtered_df, selected_group)
             st.divider()  # Add visual separator
             
             # Calculate global medians for quadrant analysis
-            global_median_price = df['sticker_price_2013'].median()
-            global_median_mobility = df['mobility_rate'].median()
+            global_median_price = filtered_df['sticker_price_2013'].median()
+            global_median_mobility = filtered_df['mobility_rate'].median()
             
             # Calculate quadrant counts
-            q1 = len(df[(df['sticker_price_2013'] > global_median_price) & 
-                       (df['mobility_rate'] > global_median_mobility)])
-            q2 = len(df[(df['sticker_price_2013'] < global_median_price) & 
-                       (df['mobility_rate'] > global_median_mobility)])
-            q3 = len(df[(df['sticker_price_2013'] > global_median_price) & 
-                       (df['mobility_rate'] < global_median_mobility)])
-            q4 = len(df[(df['sticker_price_2013'] < global_median_price) & 
-                       (df['mobility_rate'] < global_median_mobility)])
+            q1 = len(filtered_df[(filtered_df['sticker_price_2013'] > global_median_price) & 
+                       (filtered_df['mobility_rate'] > global_median_mobility)])
+            q2 = len(filtered_df[(filtered_df['sticker_price_2013'] < global_median_price) & 
+                       (filtered_df['mobility_rate'] > global_median_mobility)])
+            q3 = len(filtered_df[(filtered_df['sticker_price_2013'] > global_median_price) & 
+                       (filtered_df['mobility_rate'] < global_median_mobility)])
+            q4 = len(filtered_df[(filtered_df['sticker_price_2013'] < global_median_price) & 
+                       (filtered_df['mobility_rate'] < global_median_mobility)])
             
             st.markdown("### Quadrant Distribution")
             col1, col2 = st.columns(2)
@@ -369,9 +376,9 @@ def show_affordability_analysis(iclevel=4):
             ])
             
             with tab1:
-                high_mob_low_cost = df[
-                    (df['sticker_price_2013'] < global_median_price) & 
-                    (df['mobility_rate'] > global_median_mobility)
+                high_mob_low_cost = filtered_df[
+                    (filtered_df['sticker_price_2013'] < global_median_price) & 
+                    (filtered_df['mobility_rate'] > global_median_mobility)
                 ].copy()
                 
                 if not high_mob_low_cost.empty:
@@ -399,9 +406,9 @@ def show_affordability_analysis(iclevel=4):
                     st.write("No institutions in this quadrant")
             
             with tab2:
-                high_mob_high_cost = df[
-                    (df['sticker_price_2013'] > global_median_price) & 
-                    (df['mobility_rate'] > global_median_mobility)
+                high_mob_high_cost = filtered_df[
+                    (filtered_df['sticker_price_2013'] > global_median_price) & 
+                    (filtered_df['mobility_rate'] > global_median_mobility)
                 ].copy()
                 
                 if not high_mob_high_cost.empty:
@@ -429,9 +436,9 @@ def show_affordability_analysis(iclevel=4):
                     st.write("No institutions in this quadrant")
             
             with tab3:
-                low_mob_low_cost = df[
-                    (df['sticker_price_2013'] < global_median_price) & 
-                    (df['mobility_rate'] < global_median_mobility)
+                low_mob_low_cost = filtered_df[
+                    (filtered_df['sticker_price_2013'] < global_median_price) & 
+                    (filtered_df['mobility_rate'] < global_median_mobility)
                 ].copy()
                 
                 if not low_mob_low_cost.empty:
@@ -459,9 +466,9 @@ def show_affordability_analysis(iclevel=4):
                     st.write("No institutions in this quadrant")
             
             with tab4:
-                low_mob_high_cost = df[
-                    (df['sticker_price_2013'] > global_median_price) & 
-                    (df['mobility_rate'] < global_median_mobility)
+                low_mob_high_cost = filtered_df[
+                    (filtered_df['sticker_price_2013'] > global_median_price) & 
+                    (filtered_df['mobility_rate'] < global_median_mobility)
                 ].copy()
                 
                 if not low_mob_high_cost.empty:
@@ -490,4 +497,4 @@ def show_affordability_analysis(iclevel=4):
             
             st.divider()
             st.markdown("### Complete Institution List")
-            show_institution_list(df, selected_group)
+            show_institution_list(filtered_df, selected_group)
