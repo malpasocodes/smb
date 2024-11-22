@@ -102,3 +102,16 @@
 [2024-11-22 11:30:10,143] INFO [college_mobility.load_cost_data:41] Successfully loaded cost data with 2463 rows
 [2024-11-22 11:30:10,151] INFO [college_mobility.merge_datasets:68] Filtered to 1363 mobility records and 1465 cost records
 [2024-11-22 11:30:10,153] INFO [college_mobility.merge_datasets:77] Successfully merged datasets with 1363 final records
+[2024-11-22 11:32:04,888] INFO [college_mobility.merge_datasets:56] Starting dataset merge...
+[2024-11-22 11:32:04,890] INFO [college_mobility.load_mobility_data:22] Loading mobility data from data/mrc_table2.csv...
+[2024-11-22 11:32:04,932] INFO [college_mobility.load_mobility_data:24] Successfully loaded mobility data with 2202 rows
+[2024-11-22 11:32:04,934] INFO [college_mobility.load_cost_data:39] Loading cost data from data/mrc_table10.csv...
+[2024-11-22 11:32:04,951] INFO [college_mobility.load_cost_data:41] Successfully loaded cost data with 2463 rows
+[2024-11-22 11:32:04,953] INFO [college_mobility.merge_datasets:68] Filtered to 1363 mobility records and 1465 cost records
+[2024-11-22 11:32:04,955] INFO [college_mobility.merge_datasets:77] Successfully merged datasets with 1363 final records
+[2024-11-22 11:37:24,189] INFO [college_mobility.merge_datasets:56] Starting dataset merge...
+[2024-11-22 11:37:24,189] INFO [college_mobility.merge_datasets:56] Starting dataset merge...
+[2024-11-22 11:37:24,201] INFO [college_mobility.merge_datasets:74] Filtered to 2153 mobility records and 2378 cost records
+[2024-11-22 11:37:24,201] INFO [college_mobility.merge_datasets:74] Filtered to 2153 mobility records and 2378 cost records
+[2024-11-22 11:37:24,205] INFO [college_mobility.merge_datasets:83] Successfully merged datasets with 2153 final records
+[2024-11-22 11:37:24,205] INFO [college_mobility.merge_datasets:83] Successfully merged datasets with 2153 final records

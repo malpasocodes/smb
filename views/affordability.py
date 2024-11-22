@@ -252,31 +252,52 @@ def show_institution_list(df: pd.DataFrame, selected_group: str):
         use_container_width=True
     )
 
-def show_affordability_analysis():
+def show_affordability_analysis(iclevel=4):
     """Display the affordability analysis view."""
     df = merge_datasets()
     
     if df is not None:
+        # Filter by institution level
+        df = df[df['iclevel'] == iclevel].copy()
+        
         def get_group_and_subgroup(row):
-            if row['tier'] in [1, 2]:
-                group = 'Elite'
-                subgroup = 'Ivy Plus' if row['tier'] == 1 else 'Other Elite'
-            elif row['tier'] in [3, 4]:
-                group = 'Highly Selective'
-                subgroup = 'Public' if row['tier'] == 3 else 'Private'
-            elif row['tier'] in [5, 6]:
-                group = 'Selective'
-                subgroup = 'Public' if row['tier'] == 5 else 'Private'
-            elif row['tier'] in [7, 8]:
-                group = 'Nonselective'
-                subgroup = 'Public' if row['tier'] == 7 else 'Private'
-            elif row['tier'] == 10:
-                group = 'Four-year for-profit'
-                subgroup = 'For-profit'
+            if iclevel == 4:
+                if row['tier'] in [1, 2]:
+                    group = 'Elite'
+                    subgroup = 'Ivy Plus' if row['tier'] == 1 else 'Other Elite'
+                elif row['tier'] in [3, 4]:
+                    group = 'Highly Selective'
+                    subgroup = 'Public' if row['tier'] == 3 else 'Private'
+                elif row['tier'] in [5, 6]:
+                    group = 'Selective'
+                    subgroup = 'Public' if row['tier'] == 5 else 'Private'
+                elif row['tier'] in [7, 8]:
+                    group = 'Nonselective'
+                    subgroup = 'Public' if row['tier'] == 7 else 'Private'
+                elif row['tier'] == 10:
+                    group = 'Four-year for-profit'
+                    subgroup = 'For-profit'
+            else:  # Two-year colleges
+                if row['tier'] == 9:
+                    group = 'Two-year Public'
+                    subgroup = 'Public'
+                elif row['tier'] == 11:
+                    group = 'Two-year For-profit'
+                    subgroup = 'For-profit'
+                else:
+                    group = 'Other'
+                    subgroup = 'Other'
             return pd.Series([group, subgroup])
         
         df[['group', 'subgroup']] = df.apply(get_group_and_subgroup, axis=1)
         df['mobility_rate'] = df['kq4_cond_parq1'] + df['kq5_cond_parq1']
+        
+        st.title(f"{'Two' if iclevel == 2 else 'Four'} Year Colleges: Mobility and Affordability Analysis")
+        
+        st.markdown("""
+        This analysis explores the relationship between college affordability and economic mobility.
+        Select different institution groups to compare their performance.
+        """)
         
         st.sidebar.header("Filters")
         

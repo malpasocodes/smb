@@ -32,7 +32,7 @@ def main():
     
     pages = {
         "Economic Mobility": ["Mobility Ladder", "Documentation"],
-        "Mobility vs Affordability": ["Four Year Colleges", "Documentation"]
+        "Mobility vs Affordability": ["Four Year Colleges", "Two Year Colleges", "Documentation"]
     }
     
     selected_page = st.sidebar.selectbox(
@@ -47,7 +47,9 @@ def main():
             st.info("This analysis is currently under development.")
     elif level_1 == "Mobility vs Affordability":
         if selected_page == "Four Year Colleges":
-            show_affordability_analysis()
+            show_affordability_analysis(iclevel=4)
+        elif selected_page == "Two Year Colleges":
+            show_affordability_analysis(iclevel=2)
     else:
         st.info("This analysis is currently under development.")
 

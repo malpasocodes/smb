@@ -61,16 +61,22 @@ def merge_datasets() -> Optional[pd.DataFrame]:
             app_logger.error("One or more required datasets failed to load")
             return None
             
-        # Filter for only four-year colleges
-        mobility_df = mobility_df[mobility_df['iclevel'] == 1]
-        cost_df = cost_df[cost_df['iclevel'] == 1]
+        # Map iclevel values to standardized format
+        # Original data: 1 = 4-year, 2 = 2-year
+        # Our app: 4 = 4-year, 2 = 2-year
+        mobility_df['iclevel'] = mobility_df['iclevel'].map({1: 4, 2: 2})
+        cost_df['iclevel'] = cost_df['iclevel'].map({1: 4, 2: 2})
+        
+        # Keep only 2-year and 4-year colleges
+        mobility_df = mobility_df[mobility_df['iclevel'].isin([2, 4])]
+        cost_df = cost_df[cost_df['iclevel'].isin([2, 4])]
         
         app_logger.info(f"Filtered to {len(mobility_df)} mobility records and {len(cost_df)} cost records")
         
         merged_df = pd.merge(
             mobility_df,
-            cost_df[['super_opeid', 'sticker_price_2013', 'scorecard_netprice_2013']],
-            on='super_opeid',
+            cost_df[['super_opeid', 'iclevel', 'sticker_price_2013', 'scorecard_netprice_2013']],
+            on=['super_opeid', 'iclevel'],
             how='inner'
         )
         
