@@ -216,15 +216,9 @@ def show_institution_list(df: pd.DataFrame, selected_group: str):
     
     # Prepare display columns
     display_df = df[[
-        'name', 'subgroup', 'sticker_price_2013', 
+        'name', 'group', 'sticker_price_2013', 
         'scorecard_netprice_2013', 'mobility_rate', 'par_q1'
     ]].copy()
-    
-    # Format columns
-    display_df['sticker_price_2013'] = display_df['sticker_price_2013'].apply(lambda x: f"${x:,.0f}")
-    display_df['scorecard_netprice_2013'] = display_df['scorecard_netprice_2013'].apply(lambda x: f"${x:,.0f}")
-    display_df['mobility_rate'] = display_df['mobility_rate'].apply(lambda x: f"{x:.1%}")
-    display_df['par_q1'] = display_df['par_q1'].apply(lambda x: f"{x:.1%}")
     
     # Rename columns for display
     display_df.columns = [
@@ -232,6 +226,18 @@ def show_institution_list(df: pd.DataFrame, selected_group: str):
         'Net Price', 'Mobility Rate', 'Bottom Quintile Share'
     ]
     
+    # Display help text first
+    st.markdown("""
+    **Column Descriptions:**
+    - Institution: Name of college or university
+    - Type: Institution subgroup (e.g., Public, Private, Ivy Plus)
+    - Sticker Price: Published tuition and fees (before financial aid) in 2013
+    - Net Price: Average net price (after financial aid) in 2013
+    - Mobility Rate: Probability of moving from bottom to top quintile
+    - Bottom Quintile Share: Share of students from bottom income quintile
+    """)
+    
+    # Display the dataframe
     st.dataframe(
         display_df.sort_values('Mobility Rate', ascending=False)
         .reset_index(drop=True)
@@ -239,18 +245,11 @@ def show_institution_list(df: pd.DataFrame, selected_group: str):
         .set_index('Rank')
         .style.format({
             'Sticker Price': '${:,.0f}',
+            'Net Price': '${:,.0f}',
             'Mobility Rate': '{:.1%}',
             'Bottom Quintile Share': '{:.1%}'
         }),
-        use_container_width=True,
-        help="""
-        Institution: Name of college or university
-        Type: Institution subgroup (e.g., Public, Private, Ivy Plus)
-        Sticker Price: Published tuition and fees (before financial aid) in 2013
-        Net Price: Average net price (after financial aid) in 2013
-        Mobility Rate: Probability of moving from bottom to top quintile
-        Bottom Quintile Share: Percentage of students from bottom 20% of parent income
-        """
+        use_container_width=True
     )
 
 def show_affordability_analysis():
