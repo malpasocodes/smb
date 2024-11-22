@@ -12,10 +12,44 @@ def get_page_config():
 
 def show_home():
     st.title("College Mobility Analysis Dashboard")
-    st.markdown("""
-    ### Understanding Intergenerational Income Mobility in Higher Education
     
-    Select an analysis from the sidebar to begin exploring.
+    st.markdown("""
+    ### About This Dashboard
+    
+    This interactive dashboard explores the relationship between college affordability and economic mobility in U.S. higher education. Using data from [Opportunity Insights](https://opportunityinsights.org/), we analyze how different types of colleges contribute to intergenerational economic mobility.
+    
+    ### Key Metrics
+    - **Economic Mobility**: The probability of moving from the bottom income quintile to the top quintile
+    - **Bottom Quintile Share**: Percentage of students from the bottom 20% of the income distribution
+    - **Affordability**: Both sticker price and net price (after financial aid) in 2013
+    
+    ### Available Analyses
+    
+    #### 1. Mobility vs Affordability
+    - **Four Year Colleges**: Analyze mobility rates and affordability across different types of four-year institutions (Elite, Selective, etc.)
+    - **Two Year Colleges**: Compare mobility outcomes between public and for-profit two-year institutions
+    
+    #### 2. Economic Mobility
+    - **Mobility Ladder**: Visualize the probability distribution of children's income quintiles given parents from the bottom quintile
+    
+    ### How to Use This Dashboard
+    
+    1. **Select an Analysis**:
+       - Use the sidebar to choose between "Mobility vs Affordability" and "Economic Mobility"
+       - Select specific analyses like "Four Year Colleges" or "Mobility Ladder"
+    
+    2. **Interact with Filters**:
+       - Filter by institution groups (e.g., Elite, Selective Public)
+       - Adjust minimum thresholds for mobility rates and bottom quintile shares
+       - Use the quadrant analysis to identify high-performing institutions
+    
+    3. **Explore the Data**:
+       - Hover over data points in plots for detailed information
+       - Sort tables by clicking column headers
+       - Use the institution list to find specific colleges
+    
+    ### Data Sources
+    This analysis uses data from the Mobility Report Cards: The Role of Colleges in Intergenerational Mobility (Chetty, Friedman, Saez, Turner, and Yagan, 2017).
     """)
 
 def main():
